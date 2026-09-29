@@ -2,524 +2,1802 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NightArcade</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+<title>GameZone 🎮</title>
+
+<style>
+
+/* =========================================================
+   GAMEZONE
+   Single-file arcade website
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #080b16;
+    --bg2: #10162a;
+    --card: #151c33;
+    --card-hover: #202a4a;
+    --white: #ffffff;
+    --muted: #aeb8d0;
+
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --blue: #38bdf8;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --orange: #fb923c;
+    --red: #f43f5e;
+
+    --radius: 18px;
+}
+
+/* BODY */
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(139,92,246,.18), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(56,189,248,.15), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(236,72,153,.12), transparent 35%),
+        var(--bg);
+
+    color: var(--white);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: rgba(8,11,22,.88);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.navbar {
+    max-width: 1400px;
+    margin: auto;
+
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    padding: 12px 22px;
+}
+
+/* LOGO */
+
+.logo {
+    font-size: 27px;
+    font-weight: 900;
+    letter-spacing: -1px;
+
+    white-space: nowrap;
+}
+
+.logo span {
+    background: linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink),
+        var(--blue)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* SEARCH */
+
+.search-area {
+    flex: 1;
+    position: relative;
+}
+
+.search-area input {
+    width: 100%;
+
+    padding: 14px 20px 14px 48px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    outline: none;
+
+    background: rgba(255,255,255,.06);
+
+    color: white;
+
+    font-size: 15px;
+
+    transition: .2s;
+}
+
+.search-area input:focus {
+    border-color: var(--purple);
+
+    box-shadow:
+        0 0 0 3px rgba(139,92,246,.15);
+}
+
+.search-icon {
+    position: absolute;
+
+    left: 17px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 18px;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+    width: min(1400px, 100%);
+
+    margin: auto;
+
+    padding: 35px 22px 80px;
+}
+
+/* HERO */
+
+.hero {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    padding: 55px 45px;
+
+    margin-bottom: 35px;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(139,92,246,.35),
+            rgba(236,72,153,.22),
+            rgba(56,189,248,.2)
+        ),
+        #11182c;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35);
+}
+
+.hero::before {
+    content: "🎮";
+
+    position: absolute;
+
+    right: 70px;
+    top: 25px;
+
+    font-size: 130px;
+
+    opacity: .12;
+
+    transform: rotate(12deg);
+}
+
+.hero h1 {
+    font-size: clamp(38px, 6vw, 68px);
+
+    line-height: 1;
+
+    margin-bottom: 15px;
+
+    letter-spacing: -3px;
+}
+
+.hero h1 span {
+    color: var(--yellow);
+}
+
+.hero p {
+    max-width: 600px;
+
+    color: var(--muted);
+
+    font-size: 17px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   CATEGORY BUTTONS
+   ========================================================= */
+
+.categories {
+    display: flex;
+
+    gap: 10px;
+
+    overflow-x: auto;
+
+    padding-bottom: 10px;
+
+    margin-bottom: 25px;
+}
+
+.category {
+    flex-shrink: 0;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    background: rgba(255,255,255,.05);
+
+    color: var(--muted);
+
+    border-radius: 999px;
+
+    padding: 10px 17px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    transition: .2s;
+}
+
+.category:hover,
+.category.active {
+    color: white;
+
+    background: var(--purple);
+
+    border-color: var(--purple);
+
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+.section-header h2 {
+    font-size: 25px;
+}
+
+.game-count {
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   GAME GRID
+   ========================================================= */
+
+.game-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(220px, 1fr));
+
+    gap: 18px;
+}
+
+/* CARD */
+
+.game-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--card);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: var(--radius);
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        border-color .2s,
+        background .2s;
+
+    animation: cardIn .35s ease both;
+}
+
+.game-card:hover {
+    transform: translateY(-7px) scale(1.015);
+
+    background: var(--card-hover);
+
+    border-color: rgba(139,92,246,.8);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35);
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
     }
 
-    :root {
-      --bg: #0b0d12;
-      --panel: #131720;
-      --panel-hover: #1a1f2b;
-      --border: #252b38;
-      --text: #f5f7fa;
-      --muted: #8d96a8;
-      --accent: #7c5cff;
-      --accent-hover: #9278ff;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    body {
-      font-family: Inter, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+/* GAME IMAGE */
 
-    /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(11, 13, 18, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
+.game-image {
+    height: 145px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 62px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+/* Different background colors */
+
+.bg-purple {
+    background: linear-gradient(135deg,#5133a5,#8b5cf6);
+}
+
+.bg-blue {
+    background: linear-gradient(135deg,#075985,#38bdf8);
+}
+
+.bg-pink {
+    background: linear-gradient(135deg,#9d174d,#ec4899);
+}
+
+.bg-green {
+    background: linear-gradient(135deg,#166534,#22c55e);
+}
+
+.bg-orange {
+    background: linear-gradient(135deg,#9a3412,#fb923c);
+}
+
+.bg-red {
+    background: linear-gradient(135deg,#881337,#f43f5e);
+}
+
+.bg-yellow {
+    background: linear-gradient(135deg,#854d0e,#facc15);
+}
+
+/* CARD CONTENT */
+
+.game-content {
+    padding: 15px;
+}
+
+.game-content h3 {
+    font-size: 17px;
+
+    margin-bottom: 5px;
+}
+
+.game-content p {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.play-button {
+    width: 100%;
+
+    margin-top: 13px;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink)
+    );
+
+    color: white;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.play-button:hover {
+    transform: scale(1.025);
+
+    filter: brightness(1.15);
+}
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.badge {
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    padding: 5px 9px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    background: rgba(0,0,0,.55);
+
+    backdrop-filter: blur(5px);
+}
+
+/* =========================================================
+   NO RESULTS
+   ========================================================= */
+
+.no-results {
+    display: none;
+
+    text-align: center;
+
+    padding: 70px 20px;
+
+    color: var(--muted);
+}
+
+.no-results div {
+    font-size: 60px;
+
+    margin-bottom: 15px;
+}
+
+/* =========================================================
+   GAME MODAL
+   ========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 18px;
+
+    background: rgba(0,0,0,.88);
+
+    backdrop-filter: blur(10px);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.player {
+    width: min(1200px, 100%);
+
+    height: min(820px, 94vh);
+
+    background: #05070d;
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.7);
+}
+
+.player-bar {
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    background: #11182c;
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.player-title {
+    font-weight: 800;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.player-actions {
+    display: flex;
+
+    gap: 8px;
+}
+
+.player-btn {
+    border: none;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.08);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+.player-btn:hover {
+    background: var(--purple);
+}
+
+#gameFrame {
+    width: 100%;
+
+    flex: 1;
+
+    border: 0;
+
+    background: #000;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    text-align: center;
+
+    padding: 30px 20px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px) {
 
     .navbar {
-      max-width: 1200px;
-      margin: auto;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 25px;
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 14px;
     }
 
     .logo {
-      font-size: 24px;
-      font-weight: 800;
-      white-space: nowrap;
+        text-align: center;
     }
 
-    .logo span {
-      color: var(--accent);
-    }
-
-    .search-wrapper {
-      flex: 1;
-      position: relative;
-    }
-
-    #search {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
-      outline: none;
-      font-size: 15px;
-    }
-
-    #search:focus {
-      border-color: var(--accent);
-    }
-
-    /* Main */
     main {
-      max-width: 1200px;
-      margin: auto;
-      padding: 40px 20px;
+        padding: 20px 14px 60px;
     }
 
     .hero {
-      margin-bottom: 35px;
+        padding: 35px 25px;
+    }
+
+    .hero::before {
+        right: -20px;
+
+        font-size: 90px;
     }
 
     .hero h1 {
-      font-size: clamp(30px, 5vw, 48px);
-      margin-bottom: 8px;
+        font-size: 42px;
     }
 
-    .hero p {
-      color: var(--muted);
-      font-size: 16px;
-    }
-
-    /* Game Grid */
     .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+
+        gap: 12px;
     }
 
-    .game-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    .game-image {
+        height: 110px;
+
+        font-size: 45px;
     }
 
-    .game-card:hover {
-      transform: translateY(-4px);
-      background: var(--panel-hover);
-      border-color: var(--accent);
+    .game-content {
+        padding: 11px;
     }
 
-    .game-thumbnail {
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(
-        135deg,
-        #171b28,
-        #252b3a
-      );
-      font-size: 42px;
-    }
-
-    .game-info {
-      padding: 15px;
-    }
-
-    .game-info h3 {
-      margin-bottom: 6px;
-      font-size: 17px;
-    }
-
-    .game-info p {
-      color: var(--muted);
-      font-size: 13px;
+    .game-content h3 {
+        font-size: 15px;
     }
 
     .play-button {
-      margin-top: 12px;
-      width: 100%;
-      padding: 9px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--accent);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
+        font-size: 12px;
+
+        padding: 9px;
     }
 
-    .play-button:hover {
-      background: var(--accent-hover);
-    }
+}
 
-    .no-results {
-      display: none;
-      text-align: center;
-      color: var(--muted);
-      padding: 50px 0;
-    }
+@media(max-width:430px) {
 
-    /* Game Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.85);
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .game-player {
-      width: min(1100px, 100%);
-      height: min(700px, 90vh);
-      background: #000;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .player-header {
-      height: 55px;
-      padding: 0 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .player-header h2 {
-      font-size: 16px;
-    }
-
-    .close-button {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      font-size: 28px;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .close-button:hover {
-      color: white;
-    }
-
-    #gameFrame {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: black;
-    }
-
-    @media (max-width: 650px) {
-      .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-
-      .game-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .game-thumbnail {
-        height: 110px;
-      }
-
-      .game-info {
-        padding: 12px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .game-grid {
+    .game-grid {
         grid-template-columns: 1fr;
-      }
     }
-  </style>
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <header>
-    <nav class="navbar">
-      <div class="logo">
-        Night<span>Arcade</span>
-      </div>
+<!-- =======================================================
+     HEADER
+     ======================================================= -->
 
-      <div class="search-wrapper">
+<header>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🎮 Game<span>Zone</span>
+    </div>
+
+    <div class="search-area">
+
+        <span class="search-icon">🔎</span>
+
         <input
-          type="search"
-          id="search"
-          placeholder="Search games..."
-          autocomplete="off"
-        />
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <h1>Play something.</h1>
-      <p>Pick a game and jump straight into the action.</p>
-    </section>
-
-    <section class="game-grid" id="gameGrid">
-
-      <!-- GAME 1 -->
-      <article
-        class="game-card"
-        data-name="Space Shooter"
-        data-url="https://example.com/games/space-shooter"
-      >
-        <div class="game-thumbnail">🚀</div>
-
-        <div class="game-info">
-          <h3>Space Shooter</h3>
-          <p>Arcade · Shooter</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-      <!-- GAME 2 -->
-      <article
-        class="game-card"
-        data-name="Neon Racer"
-        data-url="https://example.com/games/neon-racer"
-      >
-        <div class="game-thumbnail">🏎️</div>
-
-        <div class="game-info">
-          <h3>Neon Racer</h3>
-          <p>Racing · Arcade</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-      <!-- GAME 3 -->
-      <article
-        class="game-card"
-        data-name="Dungeon Quest"
-        data-url="https://example.com/games/dungeon-quest"
-      >
-        <div class="game-thumbnail">⚔️</div>
-
-        <div class="game-info">
-          <h3>Dungeon Quest</h3>
-          <p>Adventure · RPG</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-      <!-- GAME 4 -->
-      <article
-        class="game-card"
-        data-name="Block Puzzle"
-        data-url="https://example.com/games/block-puzzle"
-      >
-        <div class="game-thumbnail">🧩</div>
-
-        <div class="game-info">
-          <h3>Block Puzzle</h3>
-          <p>Puzzle · Casual</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-      <!-- GAME 5 -->
-      <article
-        class="game-card"
-        data-name="Zombie Survival"
-        data-url="https://example.com/games/zombie-survival"
-      >
-        <div class="game-thumbnail">🧟</div>
-
-        <div class="game-info">
-          <h3>Zombie Survival</h3>
-          <p>Action · Survival</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-      <!-- GAME 6 -->
-      <article
-        class="game-card"
-        data-name="Tower Defense"
-        data-url="https://example.com/games/tower-defense"
-      >
-        <div class="game-thumbnail">🏰</div>
-
-        <div class="game-info">
-          <h3>Tower Defense</h3>
-          <p>Strategy · Defense</p>
-
-          <button class="play-button">
-            Play
-          </button>
-        </div>
-      </article>
-
-    </section>
-
-    <div class="no-results" id="noResults">
-      No games found.
-    </div>
-  </main>
-
-  <!-- GAME PLAYER -->
-  <div class="modal" id="gameModal">
-
-    <div class="game-player">
-
-      <div class="player-header">
-        <h2 id="playerTitle">Game</h2>
-
-        <button
-          class="close-button"
-          id="closeButton"
-          aria-label="Close game"
+            id="search"
+            type="search"
+            placeholder="Search games..."
+            autocomplete="off"
         >
-          ×
-        </button>
-      </div>
-
-      <iframe
-        id="gameFrame"
-        title="Game Player"
-        allowfullscreen
-        allow="fullscreen; autoplay; gamepad"
-      ></iframe>
 
     </div>
 
-  </div>
+</nav>
 
-  <script>
-    const searchInput = document.getElementById("search");
-    const gameCards = document.querySelectorAll(".game-card");
-    const noResults = document.getElementById("noResults");
+</header>
 
-    const modal = document.getElementById("gameModal");
-    const iframe = document.getElementById("gameFrame");
-    const playerTitle = document.getElementById("playerTitle");
-    const closeButton = document.getElementById("closeButton");
 
-    /*
-     * SEARCH
-     */
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase().trim();
-      let visibleGames = 0;
+<!-- =======================================================
+     MAIN
+     ======================================================= -->
 
-      gameCards.forEach(card => {
-        const gameName = card.dataset.name.toLowerCase();
+<main>
 
-        if (gameName.includes(query)) {
-          card.style.display = "";
-          visibleGames++;
-        } else {
-          card.style.display = "none";
-        }
-      });
+    <section class="hero">
 
-      noResults.style.display =
-        visibleGames === 0 ? "block" : "none";
-    });
+        <h1>
+            Game<span>Zone</span>
+        </h1>
 
-    /*
-     * OPEN GAME
-     */
+        <p>
+            Pick a game, hit play and have fun! 🎮
+            Search through the arcade or choose a category below.
+        </p>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+
+    <div class="categories">
+
+        <button class="category active" data-category="all">
+            ⭐ All
+        </button>
+
+        <button class="category" data-category="racing">
+            🏎️ Racing
+        </button>
+
+        <button class="category" data-category="sports">
+            ⚽ Sports
+        </button>
+
+        <button class="category" data-category="action">
+            ⚔️ Action
+        </button>
+
+        <button class="category" data-category="puzzle">
+            🧩 Puzzle
+        </button>
+
+        <button class="category" data-category="arcade">
+            👾 Arcade
+        </button>
+
+        <button class="category" data-category="scary">
+            👻 Scary
+        </button>
+
+    </div>
+
+
+    <!-- SECTION -->
+
+    <div class="section-header">
+
+        <h2>🔥 Games</h2>
+
+        <span
+            class="game-count"
+            id="gameCount">
+            Games
+        </span>
+
+    </div>
+
+
+    <!-- GAME GRID -->
+
+    <section
+        class="game-grid"
+        id="gameGrid">
+
+
+        <!-- =================================================
+             GAME: DUNE DASH
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Dune Dash"
+            data-category="racing"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-orange">
+                🏜️
+                <span class="badge">RACING</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Dune Dash</h3>
+
+                <p>Race · Arcade</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             SNOW RIDER
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Snow Rider"
+            data-category="racing"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-blue">
+                🏂
+                <span class="badge">RACING</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Snow Rider</h3>
+
+                <p>Snow · Racing</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             SOCCER 2026
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Soccer 2026"
+            data-category="sports"
+            data-url="https://sites.google.com/view/drive-u-7-home/soccer-2026">
+
+            <div class="game-image bg-green">
+                ⚽
+                <span class="badge">SPORTS</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Soccer 2026</h3>
+
+                <p>Football · Sports</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             SOCCER RANDOM
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Soccer Random"
+            data-category="sports"
+            data-url="https://sites.google.com/view/drive-u-7-home/soccer-random">
+
+            <div class="game-image bg-green">
+                ⚽
+                <span class="badge">SPORTS</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Soccer Random</h3>
+
+                <p>Football · 2 Player</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             GUNSPIN
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Gunspin"
+            data-category="action"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-red">
+                🎯
+                <span class="badge">ACTION</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Gunspin</h3>
+
+                <p>Action · Arcade</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             BASKET RANDOM
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Basket Random"
+            data-category="sports"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-purple">
+                🏀
+                <span class="badge">SPORTS</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Basket Random</h3>
+
+                <p>Basketball · Arcade</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             ROOFTOP RUN
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Rooftop Run"
+            data-category="action"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-pink">
+                🏃
+                <span class="badge">ACTION</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Rooftop Run</h3>
+
+                <p>Running · Action</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             ROCKETGOAL
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="RocketGoal.io"
+            data-category="sports"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-blue">
+                🚀
+                <span class="badge">SPORTS</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>RocketGoal.io</h3>
+
+                <p>Football · Multiplayer</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             DRIFT RACE
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Drift Race"
+            data-category="racing"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-purple">
+                🏎️
+                <span class="badge">RACING</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Drift Race</h3>
+
+                <p>Cars · Racing</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             BUS SIMULATOR
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Bus Simulator"
+            data-category="racing"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-yellow">
+                🚌
+                <span class="badge">SIM</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Bus Simulator</h3>
+
+                <p>Driving · Simulator</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             GTA SIMULATOR
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="GTA Simulator"
+            data-category="action"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-red">
+                🚗
+                <span class="badge">ACTION</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>GTA Simulator</h3>
+
+                <p>Driving · Action</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             PAPER IO 2
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Paper.io 2"
+            data-category="arcade"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-blue">
+                📄
+                <span class="badge">ARCADE</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Paper.io 2</h3>
+
+                <p>Arcade · Strategy</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             CLUSTER RUSH
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Cluster Rush"
+            data-category="action"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-orange">
+                🏃
+                <span class="badge">ACTION</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Cluster Rush</h3>
+
+                <p>Action · Running</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             OBBY BOTS
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Obby Bots"
+            data-category="arcade"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-purple">
+                🤖
+                <span class="badge">ARCADE</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Obby Bots</h3>
+
+                <p>Obby · Arcade</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             MOTO X3M
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Moto X3M Winter"
+            data-category="racing"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-blue">
+                🏍️
+                <span class="badge">RACING</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Moto X3M Winter</h3>
+
+                <p>Motorbike · Racing</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             ULTRAKILL
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Ultrakill"
+            data-category="action"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-red">
+                👾
+                <span class="badge">ACTION</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Ultrakill</h3>
+
+                <p>Action · Shooter</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TACO STAND
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Taco Stand"
+            data-category="arcade"
+            data-url="https://sites.google.com/view/drive-u-7-home/home">
+
+            <div class="game-image bg-yellow">
+                🌮
+                <span class="badge">ARCADE</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Taco Stand</h3>
+
+                <p>Cooking · Casual</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             MAXWELL STEVENSON EXAMPLE
+             ================================================= -->
+
+        <article
+            class="game-card"
+            data-name="Super Mario 64"
+            data-category="arcade"
+            data-url="https://maxwellstevenson.com/gxmes/super-mario-64/">
+
+            <div class="game-image bg-green">
+                🍄
+                <span class="badge">ARCADE</span>
+            </div>
+
+            <div class="game-content">
+
+                <h3>Super Mario 64</h3>
+
+                <p>Platform · Adventure</p>
+
+                <button class="play-button">
+                    ▶ PLAY
+                </button>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+
+    <!-- NO RESULTS -->
+
+    <div
+        class="no-results"
+        id="noResults">
+
+        <div>😵</div>
+
+        <h2>No games found</h2>
+
+        <p>
+            Try another search!
+        </p>
+
+    </div>
+
+</main>
+
+
+<!-- =======================================================
+     GAME PLAYER
+     ======================================================= -->
+
+<div
+    class="modal"
+    id="gameModal">
+
+    <div class="player">
+
+        <div class="player-bar">
+
+            <div class="player-title">
+
+                🎮
+
+                <span id="playerTitle">
+                    Game
+                </span>
+
+            </div>
+
+            <div class="player-actions">
+
+                <button
+                    class="player-btn"
+                    id="fullscreenBtn"
+                    title="Fullscreen">
+
+                    ⛶
+
+                </button>
+
+                <button
+                    class="player-btn"
+                    id="closeBtn"
+                    title="Close">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GAME IFRAME -->
+
+        <iframe
+            id="gameFrame"
+            title="Game Player"
+            allow="fullscreen; autoplay; gamepad"
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     FOOTER
+     ======================================================= -->
+
+<footer>
+
+    🎮 GameZone · Browser Arcade
+
+    <br><br>
+
+    Games are loaded from their external hosting pages.
+    Game availability depends on the original host.
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   GAMEZONE JAVASCRIPT
+   ========================================================= */
+
+
+/* ELEMENTS */
+
+const searchInput =
+    document.getElementById("search");
+
+const gameGrid =
+    document.getElementById("gameGrid");
+
+const gameCards =
+    document.querySelectorAll(".game-card");
+
+const categories =
+    document.querySelectorAll(".category");
+
+const gameCount =
+    document.getElementById("gameCount");
+
+const noResults =
+    document.getElementById("noResults");
+
+const modal =
+    document.getElementById("gameModal");
+
+const iframe =
+    document.getElementById("gameFrame");
+
+const playerTitle =
+    document.getElementById("playerTitle");
+
+const closeBtn =
+    document.getElementById("closeBtn");
+
+const fullscreenBtn =
+    document.getElementById("fullscreenBtn");
+
+
+/* CURRENT CATEGORY */
+
+let currentCategory = "all";
+
+
+/* =========================================================
+   UPDATE GAME COUNT
+   ========================================================= */
+
+function updateCount() {
+
+    let visible = 0;
+
     gameCards.forEach(card => {
-      const playButton = card.querySelector(".play-button");
 
-      playButton.addEventListener("click", event => {
-        event.stopPropagation();
+        if (
+            card.style.display !== "none"
+        ) {
+            visible++;
+        }
 
-        const gameName = card.dataset.name;
-        const gameURL = card.dataset.url;
-
-        playerTitle.textContent = gameName;
-
-        // Load the selected game inside the iframe.
-        iframe.src = gameURL;
-
-        modal.classList.add("active");
-
-        document.body.style.overflow = "hidden";
-      });
     });
 
+    gameCount.textContent =
+        visible + " game" +
+        (visible === 1 ? "" : "s");
+
+}
+
+
+/* =========================================================
+   FILTER GAMES
+   ========================================================= */
+
+function filterGames() {
+
+    const query =
+        searchInput.value
+        .toLowerCase()
+        .trim();
+
+    let visible = 0;
+
+    gameCards.forEach(card => {
+
+        const name =
+            card.dataset.name
+            .toLowerCase();
+
+        const category =
+            card.dataset.category;
+
+        const matchesSearch =
+            name.includes(query);
+
+        const matchesCategory =
+            currentCategory === "all" ||
+            category === currentCategory;
+
+        if (
+            matchesSearch &&
+            matchesCategory
+        ) {
+
+            card.style.display = "";
+
+            visible++;
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+
+    /* NO RESULTS */
+
+    noResults.style.display =
+        visible === 0
+            ? "block"
+            : "none";
+
+
+    updateCount();
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+searchInput.addEventListener(
+    "input",
+    filterGames
+);
+
+
+/* =========================================================
+   CATEGORY BUTTONS
+   ========================================================= */
+
+categories.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            categories.forEach(btn => {
+
+                btn.classList.remove(
+                    "active"
+                );
+
+            });
+
+            button.classList.add(
+                "active"
+            );
+
+            currentCategory =
+                button.dataset.category;
+
+            filterGames();
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   OPEN GAME
+   ========================================================= */
+
+gameCards.forEach(card => {
+
+    const playButton =
+        card.querySelector(".play-button");
+
+    playButton.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+            const title =
+                card.dataset.name;
+
+            const url =
+                card.dataset.url;
+
+
+            playerTitle.textContent =
+                title;
+
+
+            /*
+             * Load external game page
+             * inside the iframe.
+             */
+
+            iframe.src = url;
+
+
+            modal.classList.add(
+                "active"
+            );
+
+
+            document.body.style.overflow =
+                "hidden";
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   CLOSE GAME
+   ========================================================= */
+
+function closeGame() {
+
+    modal.classList.remove(
+        "active"
+    );
+
+
     /*
-     * CLOSE GAME
+     * Clearing the iframe stops
+     * the external game.
      */
-    function closeGame() {
-      modal.classList.remove("active");
 
-      // Clear the iframe so the game stops running.
-      iframe.src = "";
+    iframe.src = "";
 
-      document.body.style.overflow = "";
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* CLOSE BUTTON */
+
+closeBtn.addEventListener(
+    "click",
+    closeGame
+);
+
+
+/* =========================================================
+   CLICK OUTSIDE PLAYER
+   ========================================================= */
+
+modal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === modal
+        ) {
+
+            closeGame();
+
+        }
+
     }
+);
 
-    closeButton.addEventListener("click", closeGame);
 
-    /*
-     * Close when clicking outside the player.
-     */
-    modal.addEventListener("click", event => {
-      if (event.target === modal) {
-        closeGame();
-      }
-    });
+/* =========================================================
+   ESC KEY
+   ========================================================= */
 
-    /*
-     * Close with Escape.
-     */
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && modal.classList.contains("active")) {
-        closeGame();
-      }
-    });
-  </script>
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            modal.classList.contains("active")
+        ) {
+
+            closeGame();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FULLSCREEN
+   ========================================================= */
+
+fullscreenBtn.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            if (
+                !document.fullscreenElement
+            ) {
+
+                await iframe.requestFullscreen();
+
+            } else {
+
+                await document.exitFullscreen();
+
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Fullscreen unavailable."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL COUNT
+   ========================================================= */
+
+updateCount();
+
+</script>
 
 </body>
 </html>
